@@ -1,16 +1,21 @@
 {
-  "name": "wuyoscar-skills",
+  "name": "xqy272-skills",
   "owner": {
-    "name": "wuyoscar",
-    "url": "https://github.com/wuyoscar"
+    "name": "xqy272",
+    "url": "https://github.com/xqy272"
   },
   "plugins": [
     {
       "name": "gpt-image",
       "source": "./",
-      "description": "OpenAI GPT Image 2/2.5 skill — model choice, on-demand prompt references, and a packaged CLI for generation and editing. Keeps Image 2 references and lightweight 2.5 guidance separate.",
-      "homepage": "https://github.com/wuyoscar/gpt_image_2_skill",
-      "keywords": ["gpt-image-2", "openai", "image-generation", "prompt-library"]
+      "description": "GPT Image generation and editing with reusable defaults, optional creative references, and prompt-only support.",
+      "homepage": "https://github.com/xqy272/GPT-Image-Skill",
+      "keywords": [
+        "gpt-image-2",
+        "openai",
+        "image-generation",
+        "prompt-library"
+      ]
     }
   ]
 }

@@ -2,7 +2,7 @@
 
 Range: No. 33–45 · Count: 13
 
-Load this file only when the request matches this category. For cross-cutting writing rules, pair it with `craft.md`.
+Read a relevant entry for a poster or typography problem. Consult a matching `craft.md` section only if another gap remains.
 
 ### No. 33 · Chinese tea launch poster
 
@@ -68,6 +68,8 @@ Palette: cream, charcoal black, crimson red, mustard-yellow accent. Pure flat gr
 - Prompt attribution: Curated
 - Visual QA: The title, tagline, and credit wording are readable and correct; the knife-shaped shadow points down-right rather than up into the title as requested.
 - Run evidence: [Sunburst sample runs](../../../docs/sunburst-samples.md).
+
+**When useful:** borrow the large shadow as a way to connect a subject and title. The recorded output did not follow the requested shadow direction. For another brief, carry over this compositional method without inheriting the thriller's knife, colors, or credit copy.
 
 ### No. 36 · Vogue-style fashion magazine cover
 

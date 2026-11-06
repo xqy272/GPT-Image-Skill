@@ -12,8 +12,9 @@ Source check: **2026-09-09**;
 - [Transparent product cutouts](https://developers.openai.com/api/docs/guides/image-prompting?model=gpt-image-2.5#create-a-transparent-product-cutout)
 - [Character consistency across turns](https://developers.openai.com/api/docs/guides/image-prompting?model=gpt-image-2.5#keep-a-character-consistent)
 
-Improved preservation is not a pixel lock. Repeated edits can drift; exact
-unchanged regions require compositing rather than relying on prompts alone.
+Improved preservation is not a pixel lock. Repeated edits can drift. If exact
+unchanged regions matter, explain the limitation; a separate compositing step
+requires the user's agreement rather than being implied by a preservation request.
 [Official migration caution](https://developers.openai.com/api/docs/guides/image-prompting?model=gpt-image-2.5#migrate-an-existing-workflow)
 
 ## Local workflow using the existing CLI

@@ -6,8 +6,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/wuyoscar/gpt_image_2_skill/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"/></a>
-  <a href="https://github.com/wuyoscar/gpt_image_2_skill/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"/></a>
+  <a href="https://github.com/xqy272/GPT-Image-Skill/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"/></a>
+  <a href="https://github.com/xqy272/GPT-Image-Skill/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"/></a>
   <img src="https://img.shields.io/badge/models-GPT%20Image%202%20%2F%202.5-purple.svg" alt="Models: GPT Image 2 / 2.5"/>
   <img src="https://img.shields.io/badge/python-%E2%89%A53.11-blue.svg" alt="Python ≥ 3.11"/>
 </p>
@@ -20,6 +20,8 @@
 <p align="center">
   <a href="#overview">Overview</a> · <a href="#sunburst-samples">2.5 samples</a> · <a href="#image-example">Example</a> · <a href="#quickstart">Quick start</a> · <a href="#install">Install</a> · <a href="#cli-reference">CLI reference</a> · <a href="#guides">Guides</a> · <a href="#gallery-index">Gallery</a> · <a href="#community">Contribute</a>
 </p>
+
+Personal fork of [wuyoscar/GPT-Image2-Skill](https://github.com/wuyoscar/GPT-Image2-Skill). The CLI, numbered gallery, sample images, and original source credits are retained. This fork routes by user intent, with reusable defaults and optional references. Community metrics below refer to the upstream project.
 
 <a id="overview"></a>
 
@@ -151,7 +153,7 @@ photorealistic, 3D render, flat vector style, pure cel shading, watercolor bleed
 | Extract a prompt from a reference | [`get-prompt-from-image`](skills/get-prompt-from-image/SKILL.md) |
 | Work in a terminal | CLI examples below, with the selected `--model` |
 
-### 🎛️ Choose a model
+### 🎛️ Models and defaults
 
 | Model | Best starting point |
 |---|---|
@@ -159,7 +161,17 @@ photorealistic, 3D render, flat vector style, pure cel shading, watercolor bleed
 | `gpt-image-2.5-sunburst` | Precise edits and reference-image workflows |
 | `gpt-image-2` | Retain the model used by existing workflows |
 
-The Skill offers this menu when the model is missing or ambiguous (for example, “GPT 2.5”), then confirms the choice before generating. An exact supported model choice proceeds directly. It always passes an explicit `--model`; the standalone CLI still defaults to `gpt-image-2`. Changing models or adding outputs requires the user's approval.
+The Skill follows the current model choice, then this task's established choice, then `GPT_IMAGE_MODEL`, then the CLI compatibility default `gpt-image-2`. A missing model alone does not trigger a menu. Ask about a family variant only when no matching preference resolves it. `--model` overrides the environment preference.
+
+Optional persistent default (in your shell or existing `.env`):
+
+```bash
+export GPT_IMAGE_MODEL=gpt-image-2.5-flare
+```
+
+PowerShell: `$env:GPT_IMAGE_MODEL = "gpt-image-2.5-flare"`. Explicit choices and task settings do not automatically overwrite saved preferences.
+
+A finished prompt requested verbatim is sent unchanged; a rough brief leaves room for concrete creative choices. Directions and prompt-only requests make no image call. References are read for a visual problem, regardless of model version. Follow-up edits attach the actual selected image. Inspect results and report deviations; exact-size requests do not authorize automatic cropping, resizing, padding, or another paid call.
 
 Both 2.5 models add `--quality xhigh` / `max` and support transparent PNG/WebP output. Start with `low` drafts; higher quality can increase latency and cost. For example, after choosing Flare:
 
@@ -216,8 +228,8 @@ test -n "${OPENAI_API_KEY:-}" && echo "OPENAI_API_KEY is already set (value hidd
 <summary><strong>Claude Code</strong></summary>
 
 ```text
-/plugin marketplace add wuyoscar/gpt_image_2_skill
-/plugin install gpt-image@wuyoscar-skills
+/plugin marketplace add xqy272/GPT-Image-Skill
+/plugin install gpt-image@xqy272-skills
 ```
 
 </details>
@@ -232,12 +244,12 @@ Open Codex and invoke the built-in installer with the GitHub skill-folder URL fo
 # gpt-image
 $skill-installer
 Install this skill from GitHub:
-https://github.com/wuyoscar/gpt_image_2_skill/tree/main/skills/gpt-image
+https://github.com/xqy272/GPT-Image-Skill/tree/main/skills/gpt-image
 
 # get-prompt-from-image
 $skill-installer
 Install this skill from GitHub:
-https://github.com/wuyoscar/gpt_image_2_skill/tree/main/skills/get-prompt-from-image
+https://github.com/xqy272/GPT-Image-Skill/tree/main/skills/get-prompt-from-image
 ```
 
 The installer downloads each GitHub folder and places it under your Codex skills directory, usually:
@@ -252,8 +264,8 @@ Restart Codex after installation so the new skills are loaded.
 If you prefer to install both manually, copy their skill folders into Codex's skills directory:
 
 ```bash
-git clone https://github.com/wuyoscar/gpt_image_2_skill.git
-cd gpt_image_2_skill
+git clone https://github.com/xqy272/GPT-Image-Skill.git
+cd GPT-Image-Skill
 
 mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
 for skill in gpt-image get-prompt-from-image; do
@@ -271,7 +283,7 @@ For runtimes supported by the cross-agent `skills` installer, select either skil
 
 ```bash
 # Change --agent to claude-code, codex, opencode, openclaw, or another supported runtime.
-npx --yes skills@latest add wuyoscar/gpt_image_2_skill \
+npx --yes skills@latest add xqy272/GPT-Image-Skill \
   --skill gpt-image \
   --skill get-prompt-from-image \
   --agent codex --copy
@@ -289,8 +301,8 @@ Other runtimes can use the manual agent-skill installation below.
 Set `AGENT_SKILLS_DIR` to the skills directory used by your agent runtime, then symlink one or both skill folders into it.
 
 ```bash
-git clone https://github.com/wuyoscar/gpt_image_2_skill.git
-cd gpt_image_2_skill
+git clone https://github.com/xqy272/GPT-Image-Skill.git
+cd GPT-Image-Skill
 
 # Choose the skill directory for your runtime.
 # Examples:
@@ -311,10 +323,10 @@ done
 <summary><strong>CLI</strong></summary>
 
 ```bash
-uvx --from git+https://github.com/wuyoscar/gpt_image_2_skill gpt-image --model gpt-image-2.5-flare -p "a cat astronaut"
+uvx --from git+https://github.com/xqy272/GPT-Image-Skill gpt-image --model gpt-image-2.5-flare -p "a cat astronaut"
 
 # or install to PATH if not already installed
-command -v gpt-image >/dev/null || uv tool install git+https://github.com/wuyoscar/gpt_image_2_skill
+command -v gpt-image >/dev/null || uv tool install git+https://github.com/xqy272/GPT-Image-Skill
 gpt-image --model gpt-image-2.5-flare -p "a cat astronaut"
 ```
 
@@ -327,7 +339,7 @@ gpt-image --model gpt-image-2.5-flare -p "a cat astronaut"
 # plugin: use Claude Code's update flow
 # codex skill: rerun the installer
 # manual git clone
-cd gpt_image_2_skill && git pull
+cd GPT-Image-Skill && git pull
 
 # CLI
 uv tool upgrade gpt-image-cli
@@ -354,7 +366,7 @@ Reads `OPENAI_API_KEY` from process env, then `.env`, then `~/.env` without over
 | Flag | Values | Default | Applies to | Notes |
 |---|---|---|---|---|
 | `-p, --prompt` | str | required | both | Full prompt text. |
-| `--model` | exact model ID above | `gpt-image-2` | both | The Skill always passes the confirmed model explicitly; the CLI default stays backward-compatible. |
+| `--model` | exact model ID above | `gpt-image-2` | both | `--model` overrides `GPT_IMAGE_MODEL`; otherwise the compatibility default is used. |
 | `-f, --file` | path | `./fig/YYYY-MM-DD-HH-MM-SS-<slug>.png` | both | Explicit output path. |
 | `-i, --image` | path (repeatable) | omitted | edits | Presence routes through `/v1/images/edits`. |
 | `-m, --mask` | path (PNG, alpha) | omitted | edits | Opaque = preserved, transparent = regenerated. Requires `-i`. |
@@ -418,7 +430,7 @@ Exit codes: `0` success · `1` API/refusal error (full response body echoed to s
 <details>
 <summary><strong>Show prompting notes</strong></summary>
 
-Shared techniques from the [historical Image 2 Cookbook](skills/gpt-image/references/openai-cookbook.md), with current 2.5 guidance organized in a separate [official-source reference router](skills/gpt-image/references/openai-image-2.5.md). Image 2 retains gallery-first guidance. A precise, model-confirmed 2.5 request needs no reference loading; otherwise choose one short task slice. Migration notes are separate. API parameters stay in [model notes](skills/gpt-image/references/models.md); community templates remain separately attributed.
+Shared techniques from the [historical Image 2 Cookbook](skills/gpt-image/references/openai-cookbook.md), with current 2.5 guidance organized in a separate [official-source reference router](skills/gpt-image/references/openai-image-2.5.md). For every model, a clear request can proceed directly. Read a relevant task slice or gallery entry only when it helps the visual problem. Migration notes are separate. API parameters stay in [model notes](skills/gpt-image/references/models.md); community templates remain separately attributed.
 
 1. **Structure, then goal.** Use a consistent order: `background/scene → subject → key details → constraints`, and **state the intended use** (ad, UI mock, infographic) so the model picks the right mode and polish level.
 2. **Any format works; consistency matters more.** Minimal prompts, descriptive paragraphs, JSON-style structures, instruction-style prompts, and tag-based prompts all work. For production, choose a format you can easily read and maintain.

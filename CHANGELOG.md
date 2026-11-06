@@ -1,10 +1,16 @@
 # Changelog
 
-## Unreleased
+## v0.3.0 — 2026-11-06
 
-- Clarified the GPT Image skill as a gallery-first, CLI-first agent runbook: analyze user prompts, search Reference Gallery/craft files, confer when useful, then invoke the packaged CLI.
-- Added safer install and API-key guidance: check existing CLI/skill state first, avoid blind reinstall/overwrite, keep global/shared installs opt-in, and never write secrets unless explicitly requested.
-- Updated cross-agent installation wording for Codex, OpenClaw, Claude Code, and manual skill runtimes.
+- Route generation, editing, directions, and prompt-only requests by user intent.
+  Preserve finished prompts and consult creative references only when helpful.
+- Add optional `GPT_IMAGE_MODEL`, including existing `.env` loading, with
+  explicit `--model` taking precedence and `gpt-image-2` retained as fallback.
+- Keep gallery numbers, sample images, original prompts, and attribution;
+  clarify optional reading and add a small visual-problem index.
+- Make image-processing and additional-generation boundaries explicit.
+- Point fork installation metadata and launcher fallback to xqy272/GPT-Image-Skill.
+  Add offline coverage and manual Agent/visual comparison scenarios.
 
 ## v0.2.0 — 2026-04-25
 

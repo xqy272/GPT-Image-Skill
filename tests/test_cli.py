@@ -53,10 +53,47 @@ class CliTests(unittest.TestCase):
         return httpx.Response(self.response_status, json=body, request=request)
 
     def test_default_preserved_and_models_not_rewritten(self):
-        self.assertEqual(parse().model, 'gpt-image-2')
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(parse().model, 'gpt-image-2')
         for model in (*MODELS, *(m + '-2026-09-08' for m in MODELS), 'gpt-image-2'):
             with self.subTest(model=model):
                 self.assertEqual(parse('--model', model).model, model)
+
+    def test_model_preference_and_explicit_override(self):
+        with patch.dict(os.environ, {'GPT_IMAGE_MODEL': MODELS[0]}):
+            self.assertEqual(parse().model, MODELS[0])
+            self.assertEqual(parse('--model', MODELS[1]).model, MODELS[1])
+        with patch.dict(os.environ, {'GPT_IMAGE_MODEL': ''}):
+            self.assertEqual(parse().model, cli.DEFAULT_MODEL)
+
+    def test_main_loads_model_preference_and_preserves_prompt(self):
+        project = self.folder / 'project'
+        home = self.folder / 'home'
+        project.mkdir()
+        home.mkdir()
+        (project / '.env').write_text(
+            f'OPENAI_API_KEY=offline-test\nGPT_IMAGE_MODEL={MODELS[0]}\n', encoding='utf-8')
+        (home / '.env').write_text(f'GPT_IMAGE_MODEL={MODELS[1]}\n', encoding='utf-8')
+        prompt = 'A cat astronaut.\nKeep this text verbatim: "晚风放映室".  No extra copy.'
+        for flags, expected in [([], MODELS[0]), (['--model', MODELS[1]], MODELS[1])]:
+            with self.subTest(flags=flags):
+                self.requests.clear()
+                output = self.folder / (expected + '.png')
+                with patch.dict(os.environ, {}, clear=True), \
+                     patch.object(cli.Path, 'cwd', return_value=project), \
+                     patch.object(cli.Path, 'home', return_value=home), \
+                     patch.object(sys, 'argv', ['gpt-image', '-p', prompt, '-f', str(output), *flags]), \
+                     patch.object(cli, 'OpenAI', return_value=self.client), \
+                     contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(cli.main(), 0)
+                self.assertEqual(len(self.requests), 1)
+                body = json.loads(self.requests[0].content)
+                self.assertEqual(body['model'], expected)
+                self.assertEqual(body['prompt'], prompt)
+                self.assertEqual(body['n'], 1)
+                self.assertEqual(body['size'], '1024x1024')
+                # The fixture is 1x1; saving never resizes it to the requested size.
+                self.assertEqual(output.read_bytes(), PNG)
 
     def test_quality_options(self):
         for model in MODELS:
@@ -138,6 +175,9 @@ class CliTests(unittest.TestCase):
                     self.assertNotIn('name="moderation"', body)
                     if extra:
                         self.assertIn(Path(extra[1]).name, body)
+                    if extra and extra[0] == '-i':
+                        self.assertLess(body.index('filename="reference.png"'),
+                                        body.index('filename="second.png"'))
 
     def test_fidelity_only_dropped_for_image2(self):
         for model, dropped in [('gpt-image-2', True), ('gpt-image-2-2026-04-21', True),
@@ -183,6 +223,23 @@ class CliTests(unittest.TestCase):
             self.assertEqual(cli.main(), 2)
             constructor.assert_not_called()
 
+    def test_timeout_is_not_replayed(self):
+        def timeout(request):
+            self.requests.append(request)
+            raise httpx.ReadTimeout('Offline timeout', request=request)
+
+        output = self.folder / 'timeout.png'
+        with OpenAI(api_key='offline-test', max_retries=0,
+                    http_client=httpx.Client(transport=httpx.MockTransport(timeout))) as client, \
+             patch.object(sys, 'argv', ['gpt-image', '-p', 'A cat', '-f', str(output)]), \
+             patch.object(cli, '_load_env_chain'), \
+             patch.dict(os.environ, {'OPENAI_API_KEY': 'offline-test'}), \
+             patch.object(cli, 'OpenAI', return_value=client), \
+             contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(cli.main(), 1)
+        self.assertEqual(len(self.requests), 1)
+        self.assertFalse(output.exists())
+
     def test_both_help_entrypoints(self):
         root = Path(__file__).resolve().parents[1]
         for script in ('src/gpt_image_cli/cli.py', 'skills/gpt-image/scripts/generate.py'):
@@ -191,6 +248,7 @@ class CliTests(unittest.TestCase):
             self.assertEqual(completed.returncode, 0, completed.stderr)
             self.assertIn('--model', completed.stdout)
             self.assertIn('xhigh', completed.stdout)
+            self.assertIn('GPT_IMAGE_MODEL', completed.stdout)
 
 
 if __name__ == '__main__':

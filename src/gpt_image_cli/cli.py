@@ -127,7 +127,10 @@ def parse_args() -> argparse.Namespace:
         help="Alpha-channel PNG mask (opaque = preserved, transparent = regenerated). "
              "Edits endpoint only; requires -i.",
     )
-    p.add_argument("--model", default=DEFAULT_MODEL, help=f"Model ID: gpt-image-2.5-flare, gpt-image-2.5-sunburst, or {DEFAULT_MODEL} (compatibility default).")
+    p.add_argument(
+        "--model", default=os.getenv("GPT_IMAGE_MODEL") or DEFAULT_MODEL,
+        help=f"Model ID. Overrides GPT_IMAGE_MODEL; otherwise defaults to {DEFAULT_MODEL}.",
+    )
     p.add_argument(
         "--size", default=DEFAULT_SIZE,
         help="Image size. Accepts literals (1024x1024, 1536x1024, 2048x2048, 3840x2160, "
@@ -277,9 +280,8 @@ def write_outputs(data: list[Any], out_path: Path, n: int) -> list[Path]:
 
 
 def main() -> int:
-    args = parse_args()
-
     _load_env_chain()
+    args = parse_args()
     if not os.environ.get("OPENAI_API_KEY"):
         print(
             "error: OPENAI_API_KEY not set. Add it to env / .env / ~/.env, or use your host agent's native image tool.",

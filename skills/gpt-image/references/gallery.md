@@ -1,6 +1,6 @@
 # GPT Image 2 Prompt Gallery Index
 
-Routing index for the full Reference Gallery. This is the canonical full catalog; README is a selected showcase. Do **not** load every category file by default. Pick the closest category below, then read only that file (or at most 2–3 neighboring files) with a relevant `craft.md` section only if needed.
+An optional index for finding visual methods and concrete examples. README is a selected showcase. Use the user's named case, subject, intended use, or current visual problem to find a relevant entry; a generation request does not require a gallery visit.
 
 Each `gallery-*.md` category file contains the concrete prompts, direct image previews, image paths, metadata, and attribution/source markers for that slice of the Gallery Atlas.
 
@@ -40,10 +40,15 @@ Each `gallery-*.md` category file contains the concrete prompts, direct image pr
 | 🖋️ Tattoo Design | [`gallery-tattoo-design.md`](gallery-tattoo-design.md) | No. 158–161 | 4 |
 | 🖥️ Screen Photography | [`gallery-screen-photography.md`](gallery-screen-photography.md) | No. 162–163 | 2 |
 
-## Loading policy
+## Find a useful method
 
-- Start here to choose a category; do not read the whole Reference Gallery into context.
-- Consult a `craft.md` section only for a specific prompt-writing gap.
-- Read exactly one `gallery-*.md` category file for normal requests; read two or three only when the user asks for hybrid styles.
-- Preserve `Curated` versus `Author + Source` metadata when adapting examples into README/gallery entries.
-- If entries move, update both this index and the corresponding category file in the same PR. Promote to README only when the example belongs in the selected visual showcase.
+| Visual problem | Starting point |
+|---|---|
+| Connect a title with the main image | [Posters, No. 35](gallery-typography-and-posters.md#no-35--saul-bass-style-thriller-movie-poster) |
+| Organize dense labels and relationships | [Infographics](gallery-infographics-and-field-guides.md), [technical illustrations](gallery-technical-illustration.md), craft sections 4–5 |
+| Keep a character or a series coherent | [Character design](gallery-character-design.md), craft section 7 |
+| Borrow light, identity, or layout from different images | [Edit examples](gallery-edit-endpoint-showcase.md), [editing notes](openai-image-2.5-editing.md) |
+
+If the case number or title is already known, open that entry directly. Otherwise search this index or the matching category's headings and prompt text, then read only the relevant entry. A case is inspiration, not a required composition; no suitable example is needed to continue from the user's brief.
+
+Keep the original `Curated` or `Author + Source` attribution when adapting an example. Inspect a sample image when its appearance matters; attach it to a generation only if the user's task calls for borrowing that reference.

@@ -1,10 +1,10 @@
 # GPT Image 2 Prompt Craft
 
-Cross-cutting principles distilled from the full 162-prompt Gallery Atlas. Use this file as the prompt-design checklist; use `gallery.md` as the routing index for the split concrete reference/case atlas as `gallery-*.md` files.
+Techniques drawn from the Gallery Atlas. Read a section for a specific visual problem, not as a mandatory checklist. Examples and templates describe possible approaches; the user's brief, wording, and selected settings take precedence.
 
 ## Table of contents
 
-0. Use the Reference Gallery before writing from scratch
+0. Find a reference when it helps
 1. Exact text goes in quotes
 2. Put canvas, aspect ratio, and layout before subject
 3. JSON / config-style prompts are a core pattern
@@ -24,9 +24,9 @@ Cross-cutting principles distilled from the full 162-prompt Gallery Atlas. Use t
 17. Attribution and gallery metadata
 18. Safety and copyright notes
 
-## 0. Use the Reference Gallery before writing from scratch
+## 0. Find a reference when it helps
 
-For Image 2's gallery-first workflow, open `gallery.md`, then read nearby cases in the matching category. For 2.5, use only the craft section needed; do not restart a gallery search or load the whole checklist.
+For any model, go directly to a known case or use `gallery.md` to locate an example of the problem you are solving. A precise prompt requested verbatim needs no rewriting pass. A rough brief can be composed directly; a useful reference may help with a particular gap, such as how a title interacts with its subject.
 
 Fast routing examples:
 - Anime/manga or multi-character boards → No. 1–12.
@@ -68,7 +68,7 @@ When structure matters, state the structure before the subject. Otherwise the mo
 
 ## 3. JSON / config-style prompts are a core pattern
 
-Do not omit this. The gallery uses JSON-like structured prompts for premium product and food rendering (No. 57, No. 58). This pattern works when the output has many interacting systems: environment, subject, materials, lighting, particles, motion, and render goals.
+The gallery uses JSON-like prompts for product and food rendering (No. 57, No. 58). This is one way to organize interacting elements such as environment, subject, materials, and lighting. It is an optional prompt format, not an API schema or a requirement to expand a simple brief.
 
 When to use:
 - Product hero renders with material/lighting precision.
@@ -229,7 +229,7 @@ Vague: `a convenience store at night`.
 
 Strong: name concrete objects, surfaces, and situational details: freezer stickers, promotional posters, trash cans, entrance mats, glass reflections, shared bikes, water droplets, phone glow, wet asphalt.
 
-Rule of thumb: include 5–12 concrete nouns for the scene and 2–4 material/lighting constraints. Do not stack empty adjectives like `stunning`, `professional`, `beautiful`, `high quality` without visual anchors.
+Choose concrete details that give the scene meaning. A sparse image may need only one telling action or object; do not add clutter to meet a detail quota. Avoid empty adjectives like `stunning` or `professional` without visual anchors.
 
 ## 10. Style anchors should be specific and bounded
 
@@ -305,6 +305,8 @@ Multi-reference rule:
 - Say exactly how references interact: apply style from Image 2 to subject from Image 1; place logo from Image 3 on the package; preserve layout from Image 1.
 - Repeat invariants on each iteration if identity, text, geometry, or brand elements must not drift.
 
+For follow-up edits, pass the actual image the user selected through `-i`. For a new composition using several references, borrow only the assigned attributes: a lighting reference need not contribute its product, labels, or background. Preservation instructions are requests to the model, so inspect both the changed area and the parts meant to stay.
+
 ## 14. Negation is for strong priors
 
 Use explicit avoid-lines when the model has a likely bad default.
@@ -337,7 +339,7 @@ For Chinese-heavy outputs:
 - Provide all copy exactly.
 - Specify layout modules and hierarchy.
 - Require readable, neat text without garbled characters, typos, English, or pinyin unless desired.
-- Use high quality for final assets.
+- Keep the user's selected quality. More legible text may call for a clearer hierarchy or less crowding; do not automatically raise quality or add generation passes.
 
 Chinese calligraphy or brush-signage prompts should specify style (`brush style`, `calligraphy-style labels`, `rice-paper texture`) and avoid fake clutter.
 

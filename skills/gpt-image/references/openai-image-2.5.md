@@ -1,8 +1,9 @@
 # GPT Image 2.5: optional reference index
 
-Keep Image 2's [gallery](gallery.md), [craft](craft.md) and
-[historical Cookbook](openai-cookbook.md) available; do not preload them for 2.5.
-A precise 2.5 brief can go straight to preflight and the CLI after model confirmation.
+These dated notes cover 2.5 examples and settings. The [gallery](gallery.md),
+[craft](craft.md), and [historical Cookbook](openai-cookbook.md) remain optional
+references for concrete visual problems. A clear request can go directly to
+the CLI with its explicit or default model; no model has a mandatory gallery path.
 
 ## Choose only what is missing
 

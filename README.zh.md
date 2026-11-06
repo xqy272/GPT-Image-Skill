@@ -6,8 +6,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/wuyoscar/gpt_image_2_skill/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"/></a>
-  <a href="https://github.com/wuyoscar/gpt_image_2_skill/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"/></a>
+  <a href="https://github.com/xqy272/GPT-Image-Skill/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"/></a>
+  <a href="https://github.com/xqy272/GPT-Image-Skill/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"/></a>
   <img src="https://img.shields.io/badge/models-GPT%20Image%202%20%2F%202.5-purple.svg" alt="模型: GPT Image 2 / 2.5"/>
   <img src="https://img.shields.io/badge/python-%E2%89%A53.11-blue.svg" alt="Python ≥ 3.11"/>
 </p>
@@ -20,6 +20,8 @@
 <p align="center">
   <a href="#overview">简介</a> · <a href="#sunburst-samples">2.5 样张</a> · <a href="#image-example">图片示例</a> · <a href="#quickstart">快速开始</a> · <a href="#install">安装</a> · <a href="#cli-reference">CLI 参数</a> · <a href="#guides">参考与阅读</a> · <a href="#gallery-index">图库</a> · <a href="#community">参与贡献</a>
 </p>
+
+这是 [wuyoscar/GPT-Image2-Skill](https://github.com/wuyoscar/GPT-Image2-Skill) 的个人 fork，保留 CLI、图库编号、样图与原始归属，改为按用户意图路由、复用默认选择并按需读取参考。文末社区指标来自上游项目。
 
 <a id="overview"></a>
 
@@ -151,7 +153,7 @@ photorealistic, 3D render, flat vector style, pure cel shading, watercolor bleed
 | 从参考图提取 Prompt | [`get-prompt-from-image`](skills/get-prompt-from-image/SKILL.md) |
 | 在终端调用 | 下方 CLI 示例，按选定模型填写 `--model` |
 
-### 🎛️ 先选模型
+### 🎛️ 模型与默认设置
 
 | 模型 | 适合的起点 |
 |---|---|
@@ -159,7 +161,17 @@ photorealistic, 3D render, flat vector style, pure cel shading, watercolor bleed
 | `gpt-image-2.5-sunburst` | 精确编辑与参考图工作流 |
 | `gpt-image-2` | 保留已有工作流使用的模型 |
 
-当用户没指定模型，或只说“GPT 2.5”等不明确名称时，Skill 会先提供上述选项，确认后再生成。明确选择支持的模型后即可继续。Skill 始终显式传入 `--model`；独立 CLI 仍默认使用 `gpt-image-2`。更换模型或增加出图数量前，先征得用户同意。
+模型优先级：本次明确指定 → 当前任务已确认的选择 → `GPT_IMAGE_MODEL` → CLI 兼容默认 `gpt-image-2`。没有指定模型本身不会触发菜单；只有用户点名一个含多个变体的系列、且没有匹配偏好时，才询问变体。显式 `--model` 优先于环境设置。
+
+可在 shell 或已有 `.env` 中设置可复用默认：
+
+```bash
+export GPT_IMAGE_MODEL=gpt-image-2.5-flare
+```
+
+PowerShell：`$env:GPT_IMAGE_MODEL = "gpt-image-2.5-flare"`。本次选择不会自动覆盖长期偏好。
+
+要求原样执行的定稿保持原文；简述中的开放空间由 Agent 做具体创作选择。只要方向或提示词时不调用生图。按视觉问题读取参考，不按型号强制查图库；追改实际引用选定图片。检查成图并如实说明偏差，精确尺寸要求本身不授权自动裁剪、缩放、补边或再次付费生成。
 
 两个 2.5 模型新增 `--quality xhigh` / `max`，并支持透明 PNG/WebP。建议先用 `low` 出草稿；更高质量可能增加耗时和费用。例如，选择 Flare 后：
 
@@ -217,8 +229,8 @@ test -n "${OPENAI_API_KEY:-}" && echo "OPENAI_API_KEY is already set (value hidd
 <summary><strong>Claude Code</strong></summary>
 
 ```text
-/plugin marketplace add wuyoscar/gpt_image_2_skill
-/plugin install gpt-image@wuyoscar-skills
+/plugin marketplace add xqy272/GPT-Image-Skill
+/plugin install gpt-image@xqy272-skills
 ```
 
 </details>
@@ -233,12 +245,12 @@ Codex 内置了 `$skill-installer`、`$skill-creator` 等 Skill 管理工具。
 # gpt-image
 $skill-installer
 Install this skill from GitHub:
-https://github.com/wuyoscar/gpt_image_2_skill/tree/main/skills/gpt-image
+https://github.com/xqy272/GPT-Image-Skill/tree/main/skills/gpt-image
 
 # get-prompt-from-image
 $skill-installer
 Install this skill from GitHub:
-https://github.com/wuyoscar/gpt_image_2_skill/tree/main/skills/get-prompt-from-image
+https://github.com/xqy272/GPT-Image-Skill/tree/main/skills/get-prompt-from-image
 ```
 
 安装器会下载每个 GitHub 文件夹，并放到你的 Codex skills 目录，通常是：
@@ -253,8 +265,8 @@ https://github.com/wuyoscar/gpt_image_2_skill/tree/main/skills/get-prompt-from-i
 如果你想手动同时安装，可以把两个 skill 文件夹复制到 Codex 的 skills 目录：
 
 ```bash
-git clone https://github.com/wuyoscar/gpt_image_2_skill.git
-cd gpt_image_2_skill
+git clone https://github.com/xqy272/GPT-Image-Skill.git
+cd GPT-Image-Skill
 
 mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
 for skill in gpt-image get-prompt-from-image; do
@@ -272,7 +284,7 @@ done
 
 ```bash
 # 将 --agent 改为 claude-code、codex、opencode、openclaw 或其他受支持运行时。
-npx --yes skills@latest add wuyoscar/gpt_image_2_skill \
+npx --yes skills@latest add xqy272/GPT-Image-Skill \
   --skill gpt-image \
   --skill get-prompt-from-image \
   --agent codex --copy
@@ -290,8 +302,8 @@ npx --yes skills@latest add wuyoscar/gpt_image_2_skill \
 把 `AGENT_SKILLS_DIR` 设置为你的 Agent 运行时所使用的 skills 目录，然后把一个或两个 skill 文件夹软链接进去。
 
 ```bash
-git clone https://github.com/wuyoscar/gpt_image_2_skill.git
-cd gpt_image_2_skill
+git clone https://github.com/xqy272/GPT-Image-Skill.git
+cd GPT-Image-Skill
 
 # 选择你的运行时对应的 skills 目录。
 # 示例：
@@ -312,10 +324,10 @@ done
 <summary><strong>CLI</strong></summary>
 
 ```bash
-uvx --from git+https://github.com/wuyoscar/gpt_image_2_skill gpt-image --model gpt-image-2.5-flare -p "a cat astronaut"
+uvx --from git+https://github.com/xqy272/GPT-Image-Skill gpt-image --model gpt-image-2.5-flare -p "a cat astronaut"
 
 # 或在尚未安装时安装到 PATH
-command -v gpt-image >/dev/null || uv tool install git+https://github.com/wuyoscar/gpt_image_2_skill
+command -v gpt-image >/dev/null || uv tool install git+https://github.com/xqy272/GPT-Image-Skill
 gpt-image --model gpt-image-2.5-flare -p "a cat astronaut"
 ```
 
@@ -328,7 +340,7 @@ gpt-image --model gpt-image-2.5-flare -p "a cat astronaut"
 # 插件：使用 Claude Code 的更新流程
 # codex 技能：重新运行安装器
 # 手动 git 克隆方式
-cd gpt_image_2_skill && git pull
+cd GPT-Image-Skill && git pull
 
 # CLI
 uv tool upgrade gpt-image-cli
@@ -419,7 +431,7 @@ result = client.images.generate(
 <details>
 <summary><strong>显示提示词笔记</strong></summary>
 
-通用技巧来自[历史 Image 2 Cookbook](skills/gpt-image/references/openai-cookbook.md)，当前 2.5 指南另行整理为[官方来源参考入口](skills/gpt-image/references/openai-image-2.5.md)。Image 2 保留原有 gallery-first 路径；2.5 在模型已确认、需求明确时无需加载参考，否则只选一份简短任务说明。迁移心得单独存放。接口参数统一放在[模型说明](skills/gpt-image/references/models.md)；社区模板单独保留来源标注。
+通用技巧来自[历史 Image 2 Cookbook](skills/gpt-image/references/openai-cookbook.md)，当前 2.5 指南另行整理为[官方来源参考入口](skills/gpt-image/references/openai-image-2.5.md)。所有型号都按用户意图决定是否读取参考；明确请求可以直接执行，只有当前视觉问题需要时才查看对应专题或案例。迁移心得单独存放。接口参数统一放在[模型说明](skills/gpt-image/references/models.md)；社区模板单独保留来源标注。
 
 1. **先结构，再目标。** 使用一致的顺序：`背景/场景 → 主体 → 关键细节 → 限制条件`，并**说明预期用途**（广告、UI 原型、信息图），以便模型选择正确模式和润色等级。
 2. **任何格式都可；一致性更重要。** 简短提示、描述段落、JSON 风格结构、指令风格提示和标签式提示均可。建议选择便于阅读和维护的提示词格式。

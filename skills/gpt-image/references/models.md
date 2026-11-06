@@ -5,7 +5,7 @@ API reference for this skill; `openai-cookbook.md` remains an earlier GPT Image 
 cookbook, not a current model catalog. The [2.5 index](openai-image-2.5.md) is
 optional; use [migration notes](openai-image-2.5-migration.md) only for comparisons.
 
-## Choose before generating
+## Resolve the model for this task
 
 | Choice | Exact API model ID | Typical use |
 |---|---|---|
@@ -14,21 +14,27 @@ optional; use [migration notes](openai-image-2.5-migration.md) only for comparis
 | Image 2 | `gpt-image-2` | Existing workflows and explicit compatibility requests |
 
 The 2.5 models also have snapshots ending in `-2026-09-08`. There is no documented
-bare `gpt-image-2.5` API alias. A name such as “GPT 2.5” is a request to clarify,
-not a reason to silently choose a model or send an invented ID.
+bare `gpt-image-2.5` API alias. A name such as “GPT 2.5” names a family rather
+than an exact API ID. Use an existing matching variant preference, or clarify
+the variant when no preference resolves it; do not invent an alias.
 
-Ask one short model-choice question if the user has not chosen, supplied an
-ambiguous name, or made a probable typo. Do not ask again when an exact model was
-already supplied. If the user delegates the choice, explain the selection and
-proceed. Model selection belongs in the conversation, never inside the image
-prompt. Always pass the selected ID explicitly with `--model`.
+Use the user's current explicit choice, then the model established for this
+task, then `GPT_IMAGE_MODEL`, then the CLI compatibility default `gpt-image-2`.
+An unspecified model alone does not require a question. If a named family has
+several variants and no matching preference resolves it, ask about that variant
+only. Clarify a probable typo rather than silently correcting a model ID.
 
-The noninteractive CLI keeps `gpt-image-2` as its compatibility default. This
-is not permission for an agent to skip the model-choice step. Do not generate
-multiple models or prompt variants without authorization. Do not change models
-or materially rewrite the prompt in response to permission, quota, or policy
-errors. The CLI disables automatic SDK retries; report errors rather than
-silently repeating potentially billable requests.
+`--model` overrides `GPT_IMAGE_MODEL`. The CLI loads process env, project `.env`,
+then `~/.env` without replacing existing values, so a saved model preference can
+be reused. This table describes the models covered by these dated notes, not
+an exhaustive allowlist. Check newer model contracts when needed; do not
+substitute an older model merely because this document does not list it.
+
+Keep model selection outside the image prompt. User intent determines whether
+to read creative references; the model determines applicable API parameters.
+Do not generate extra variants or change models without authorization. On API
+errors or uncertain timeouts, report the outcome rather than rewriting the
+prompt or replaying a potentially billable request. SDK retries are disabled.
 
 ## Parameters
 
